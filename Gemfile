@@ -12,7 +12,7 @@ gem "prometheus_exporter", "~> 0.4.5"
 gem "rake"
 gem "rest-client"
 
-gem "manageiq-loggers", "~> 0.3.0"
+gem "manageiq-loggers", "~> 0.4.2"
 gem "manageiq-messaging", "~> 0.1.2"
 
 group :development, :test do
