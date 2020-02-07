@@ -1,15 +1,13 @@
-FROM manageiq/ruby:latest
+FROM registry.access.redhat.com/ubi8/ubi
 
-RUN yum -y install centos-release-scl-rh && \
-    yum -y install --setopt=tsflags=nodocs \
-                   # To compile native gem extensions
-                   gcc-c++ \
-                   # For git based gems
-                   git \
-                   # For checking service status
-                   nmap-ncat \
-                   && \
-    yum clean all
+RUN dnf -y --disableplugin=subscription-manager module enable ruby:2.5 && \
+    dnf -y --disableplugin=subscription-manager --setopt=tsflags=nodocs install \
+    # ruby 2.5 via module
+    ruby-devel \
+    # build utilities
+    gcc-c++ git make redhat-rpm-config && \
+
+    dnf clean all
 
 ENV WORKDIR /opt/catalog-api-minion/
 ENV RAILS_ROOT $WORKDIR
@@ -22,8 +20,8 @@ COPY docker-assets/run_catalog_minion /usr/bin
 RUN echo "gem: --no-document" > ~/.gemrc && \
     gem install bundler --conservative --without development:test && \
     bundle install --jobs 2 --retry 3 && \
-    find ${RUBY_GEMS_ROOT}/gems/ | grep "\.s\?o$" | xargs rm -rvf && \
-    rm -rvf ${RUBY_GEMS_ROOT}/cache/* && \
+    find $(gem env gemdir)/gems/ | grep "\.s\?o$" | xargs rm -rvf && \
+    rm -rvf $(gem env gemdir)/cache/* && \
     rm -rvf /root/.bundle/cache
 
 RUN chgrp -R 0 $WORKDIR && \
