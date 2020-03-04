@@ -1,6 +1,5 @@
 require "manageiq-messaging"
 require "catalog/api/minion/logging"
-require "catalog-api-client"
 require "uri"
 
 module Catalog
@@ -72,10 +71,9 @@ module Catalog
         end
 
         def internal_notify_url(path)
-          config = ::CatalogApiClient.configure
           URI::HTTP.build(
-            :host   => config.host.split(":").first,
-            :port   => config.host.split(":").last,
+            :host   => ENV["CATALOG_HOST"],
+            :port   => ENV["CATALOG_PORT"],
             :path   => path
           ).to_s
         end
