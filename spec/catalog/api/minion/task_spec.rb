@@ -13,14 +13,14 @@ describe Catalog::Api::Minion::Task do
     let(:payload_params) do
       {:payload => message.payload, :message => message.message}
     end
-    let(:config) do
-      test_config = ::CatalogApiClient.configure
-      test_config.host = "localhost:3000"
+
+    around do |example|
+      with_modified_env(:CATALOG_HOST => 'localhost', :CATALOG_PORT => '3000') do
+        example.call
+      end
     end
 
     before do
-      dummy_client = double("CatalogApiClient")
-      allow(dummy_client).to receive(:configure).and_return(config)
       stub_request(:post, "http://localhost:3000/internal/v1.0/notify/task/123")
     end
 

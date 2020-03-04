@@ -1,4 +1,3 @@
-require "catalog-api-client"
 require "rest-client"
 require "catalog/api/minion/base"
 
