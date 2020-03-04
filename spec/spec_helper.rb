@@ -8,7 +8,13 @@ raise "Specs must be run in test environment" if ENV["RAILS_ENV"] != "test"
 
 require "webmock/rspec"
 require "catalog/api/minion/logging"
+require "climate_control"
+
 Catalog::Api::Minion.logger = Logger.new("/dev/null")
+
+def with_modified_env(options, &block)
+  ClimateControl.modify(options, &block)
+end
 
 RSpec.configure do |config|
   # config.use_transactional_fixtures = true

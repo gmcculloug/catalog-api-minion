@@ -16,14 +16,14 @@ RSpec.describe Catalog::Api::Minion::Approval do
       { :payload =>  message.payload, :message => message.message }
     end
     let(:event) { "request_started" }
-    let(:config) do
-      test_config = ::CatalogApiClient.configure
-      test_config.host = "localhost:3000"
+
+    around do |example|
+      with_modified_env(:CATALOG_HOST => 'localhost', :CATALOG_PORT => '3000') do
+        example.call
+      end
     end
 
     before do
-      dummy_client = double("CatalogApiClient")
-      allow(dummy_client).to receive(:configure).and_return(config)
       stub_request(:post, "http://localhost:3000/internal/v1.0/notify/approval_request/3")
     end
 
