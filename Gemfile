@@ -8,7 +8,7 @@ gem "concurrent-ruby"
 gem "more_core_extensions"
 gem "optimist"
 gem "prometheus_exporter", "~> 0.4.5"
-gem "rake"
+gem "rake", "~> 13.0.0"
 gem "rest-client", ">= 1.8.0"
 
 gem "manageiq-loggers", "~> 0.3.0"
