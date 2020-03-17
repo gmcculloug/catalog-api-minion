@@ -6,6 +6,8 @@ end
 
 require "rspec/core/rake_task"
 
+Dir.glob("lib/tasks/*.rake") .each {|f| import f}
+
 # Spec related rake tasks
 RSpec::Core::RakeTask.new(:spec)
 
